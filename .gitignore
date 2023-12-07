@@ -161,3 +161,8 @@ cython_debug/
 
 data
 !data/*.py
+
+figures/
+bkp/
+
+/scripts/
