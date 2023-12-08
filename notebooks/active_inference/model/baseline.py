@@ -14,7 +14,7 @@ def run(
     runs = []
 
     for policy in "all-one", "all-zero", "random", "max-expected-velocity":
-        hist_pos = np.zeros((n_sample_run, n_timestep))
+        hist_pos = np.zeros((n_sample_run, n_timestep - 1))
         hist_vel = np.zeros_like(hist_pos)
 
         for sample in range(n_sample_run):
@@ -23,7 +23,7 @@ def run(
 
             np.random.seed(123 + sample * 123)
 
-            for t_idx, t in enumerate(timestep):
+            for t_idx in range(timestep.size - 1):
                 if policy == "all-one":
                     a = 1
                 elif policy == "all-zero":

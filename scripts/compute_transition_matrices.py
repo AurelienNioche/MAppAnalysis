@@ -118,7 +118,13 @@ def run_analysis(step_events, n_timesteps, n_velocity, check_sum_deriv=False):
 
     p_tvv = normalize_last_dim(alpha_tvv)
 
-    return timestep, velocity, deriv_cum_steps, alpha_tvv, p_tvv
+    return (
+        timestep,
+        velocity,
+        deriv_cum_steps,
+        alpha_tvv[:-1, :, :],  # remove last timestamp
+        p_tvv[:-1, :, :],  # remove last timestamp
+    )
 
 
 def main():
@@ -129,14 +135,22 @@ def main():
     fig_folder = "../figures/compute_transition_matrices"
 
     # For each user
+    i = 0
     for u in tqdm(users):
+        print(f"user {u} ID={i}" + "-" * 10)
         # Load data
         step_events = load_data(u)
 
         # Run analysis
         timestep, velocity, deriv_cum_steps, alpha_tvv, p_tvv = run_analysis(
-            step_events=step_events, n_timesteps=n_timestep, n_velocity=n_velocity
+            step_events=step_events,
+            n_timesteps=n_timestep,
+            n_velocity=n_velocity,
+            check_sum_deriv=False,
         )
+
+        sum_steps = np.sum(deriv_cum_steps, axis=1)
+        print(f"{np.max(sum_steps):.02f} +/= {np.std(sum_steps):.02f}")
 
         # Save results -------------------------------------------------
         # Create folders
@@ -158,6 +172,8 @@ def main():
         plot_transition_matrix(
             timestep=timestep, transition_matrix=p_tvv, fig_name=fig_name
         )
+
+        i += 1
 
 
 if __name__ == "__main__":
