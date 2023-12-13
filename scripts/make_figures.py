@@ -68,7 +68,7 @@ def run_analysis(
     n_timesteps=20,
     n_velocity=20,
     check_sum_deriv=False,
-    fig_folder="figures",
+    fig_folder="../figures",
     density_plot_use_log_scale=True,
     plot_step_events_kde=False,
     plot_counts=True,
