@@ -52,11 +52,12 @@ def runs(*args, figsize=(4, 3)):
     plt.show()
 
 
-def error(*args):
-    fig, ax = plt.subplots(figsize=(3, 3))
+def error(*args, fig=None, ax=None, ylabel="error", var="error"):
+    if fig is None and ax is None:
+        fig, ax = plt.subplots(figsize=(3, 3))
     for i, r in enumerate(args):
         policy = r["policy"]
-        hist_err = r["error"]
+        hist_err = r[var]
         label = policy.replace("-", " ").capitalize()
         hist_err_mean = hist_err.mean(axis=0)
         x = np.arange(len(hist_err_mean))
@@ -82,12 +83,11 @@ def error(*args):
             alpha=0.1,
             color=f"C{i}",
         )
-        ax.set_ylabel("error")
+        ax.set_ylabel(ylabel=ylabel)
         ax.set_xlabel("epoch")
 
-    fig.legend(loc="center")
-    plt.tight_layout()
-    plt.show()
+        ax.legend(loc="center")
+    fig.tight_layout()
 
 
 def error_like(variable="error", *args):
