@@ -128,7 +128,7 @@ def error_like(variable="error", *args):
     plt.show()
 
 
-def q(alpha, title=r"$\alpha$", figsize=(6, 2), cmap="viridis"):
+def q(alpha, title=r"$\alpha$", figsize=(6, 2), cmap="viridis", between_0_and_1=False):
     plt.rcParams.update({"text.usetex": True})
 
     if len(alpha.shape) == 4:
@@ -139,7 +139,10 @@ def q(alpha, title=r"$\alpha$", figsize=(6, 2), cmap="viridis"):
             for t_idx in range(n_timestep):
                 ax = axes[a_idx, t_idx]
                 img = alpha[a_idx, t_idx, :, :]
-                ax.imshow(img, aspect="auto", cmap=cmap)
+                if between_0_and_1:
+                    ax.imshow(img, aspect="auto", cmap=cmap, vmin=0, vmax=1)
+                else:
+                    ax.imshow(img, aspect="auto", cmap=cmap)
                 ax.get_xaxis().set_ticks([])
                 ax.axes.get_yaxis().set_ticks([])
         plt.tight_layout()
@@ -151,7 +154,10 @@ def q(alpha, title=r"$\alpha$", figsize=(6, 2), cmap="viridis"):
 
         for i, ax in enumerate(axes):
             img = alpha[:, i, :]
-            ax.imshow(img, aspect="auto", cmap=cmap)
+            if between_0_and_1:
+                ax.imshow(img, aspect="auto", cmap=cmap, vmin=0, vmax=1)
+            else:
+                ax.imshow(img, aspect="auto", cmap=cmap)
             ax.get_xaxis().set_ticks([])
             ax.axes.get_yaxis().set_ticks([])
         plt.tight_layout()
